@@ -35,6 +35,8 @@
          }
       </style>
       <script>
+         const div = (a, b) => (Math.floor(a / b * 100) / 100).toFixed(2);
+
          const update = event => {
             if (!form.checkValidity()) {
                GPA.value = "";
@@ -48,9 +50,9 @@
                return;
             }
             const gpt = APlus.value * 4.3 + A.value * 4 + B.value * 3 + C.value * 2;
-            let gpa = (gpt / n).toFixed(2);
+            let gpa = div(gpt, n);
             if (+X.value !== 0) {
-               gpa += "-" + ((gpt + X.value * 4.3) / n).toFixed(2);
+               gpa += "-" + div((gpt + X.value * 4.3), n);
             }
             GPA.value = gpa;
             N.value = n;

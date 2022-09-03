@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+   <head>
+      <meta charset="utf-8">
+      <title>筑波大学 GPA 計算</title>
+      <style>
+         body {
+            background-color: ivory;
+            color: indigo;
+         }
+         h1 {
+            margin-left: 1rem;
+         }
+         form {
+            display: grid;
+            grid-template-columns: 6rem 12rem;
+            margin: 1rem;
+         }
+         label {
+            grid-column: 1;
+            margin: 1rem;
+            text-align: right;
+         }
+         input, output {
+            grid-column: 2;
+            margin: 1rem;
+            padding: 0 8px;
+            font-size: 1em;
+            background-color: white;
+            color: black;
+            border: 1px solid indigo;
+         }
+         input:invalid {
+            background-color: pink;
+         }
+      </style>
+      <script>
+         const update = event => {
+            if (!form.checkValidity()) {
+               GPA.value = "";
+               N.value = "";
+               return;
+            }
+            const n = +APlus.value + +A.value + +B.value + +C.value + +D.value + +X.value;
+            if (n === 0) {
+               GPA.value = "-";
+               N.value = "0";
+               return;
+            }
+            const gpt = APlus.value * 4.3 + A.value * 4 + B.value * 3 + C.value * 2;
+            let gpa = (gpt / n).toFixed(2);
+            if (+X.value !== 0) {
+               gpa += "-" + ((gpt + X.value * 4.3) / n).toFixed(2);
+            }
+            GPA.value = gpa;
+            N.value = n;
+         };
+      </script>
+   </head>
+   <body>
+      <h1>筑波大学 GPA 計算</h1>
+      <form id="form" onchange="update()">
+         <label for="APlus">A+</label><input id="APlus" type="number" min="0" max="999" step="0.5">
+         <label for="A">A</label><input id="A" type="number" min="0" max="999" step="0.5">
+         <label for="B">B</label><input id="B" type="number" min="0" max="999" step="0.5">
+         <label for="C">C</label><input id="C" type="number" min="0" max="999" step="0.5">
+         <label for="D">D</label><input id="D" type="number" min="0" max="999" step="0.5">
+         <label for="X">未定</label><input id="X" type="number" min="0" max="999" step="0.5">
+         <label for="GPA">GPA</label><output id="GPA" for="APlus A B C D"></output>
+         <label for="N">単位数</label><output id="N" for="APlus A B C D"></output>
+      </form>
+   </body>
+</html>

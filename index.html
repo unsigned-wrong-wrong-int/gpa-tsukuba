@@ -22,7 +22,7 @@
             margin: 1rem;
             text-align: right;
          }
-         input, output {
+         input, output, select {
             grid-column: 2;
             margin: 1rem;
             padding: 0 8px;
@@ -36,7 +36,39 @@
          }
       </style>
       <script>
-         const div = (a, b) => (Math.floor(a / b * 100) / 100).toFixed(2);
+         const floor = v => (Math.floor(v * 100) / 100).toFixed(2);
+
+         const arithmeticGPA = (aa, a, b, c, d, x, n) => {
+            const sum = aa * 4.3 + a * 4 + b * 3 + c * 2;
+            if (x === 0) {
+               return floor(sum / n);
+            }
+            return floor(sum / n) + "-" + floor((sum + x * 4.3) / n);
+         };
+
+         const geometricGPA = (aa, a, b, c, d, x, n) => {
+            if (d !== 0) {
+               return "0.00";
+            }
+            const sum = aa * Math.log(4.3) + a * Math.log(4) + b * Math.log(3) + c * Math.log(2);
+            if (x === 0) {
+               return floor(Math.exp(sum / n));
+            }
+            return "0.00-" + floor(Math.exp((sum + x * Math.log(4.3)) / n));
+         };
+
+         const harmonicGPA = (aa, a, b, c, d, x, n) => {
+            if (d !== 0) {
+               return "-";
+            }
+            const sum = aa / 4.3 + a / 4 + b / 3 + c / 2;
+            if (x === 0) {
+               return floor(n / sum);
+            }
+            return floor(n / (sum + x / 2)) + "-" + floor(n / (sum + x / 4.3));
+         };
+
+         const methods = [arithmeticGPA, geometricGPA, harmonicGPA];
 
          const update = event => {
             if (!form.checkValidity()) {
@@ -44,18 +76,15 @@
                N.value = "";
                return;
             }
-            const n = +APlus.value + +A.value + +B.value + +C.value + +D.value + +X.value;
+            const aa = +APlus.value, a = +A.value, b = +B.value, c = +C.value, d = +D.value,
+                  x = +X.value;
+            const n = aa + a + b + c + d + x;
             if (n === 0) {
                GPA.value = "-";
                N.value = "0";
                return;
             }
-            const gpt = APlus.value * 4.3 + A.value * 4 + B.value * 3 + C.value * 2;
-            let gpa = div(gpt, n);
-            if (+X.value !== 0) {
-               gpa += "-" + div((gpt + X.value * 4.3), n);
-            }
-            GPA.value = gpa;
+            GPA.value = methods[M.value](aa, a, b, c, d, x, n);
             N.value = n;
          };
       </script>
@@ -69,8 +98,13 @@
          <label for="C">C</label><input id="C" type="number" min="0" max="999.5" step="0.5">
          <label for="D">D</label><input id="D" type="number" min="0" max="999.5" step="0.5">
          <label for="X">未定</label><input id="X" type="number" min="0" max="999.5" step="0.5">
-         <label for="GPA">GPA</label><output id="GPA" for="APlus A B C D X"></output>
-         <label for="N">単位数</label><output id="N" for="APlus A B C D X"></output>
+         <label for="GPA">GPA</label><output id="GPA" for="APlus A B C D X M"></output>
+         <label for="N">単位数</label><output id="N" for="APlus A B C D X M"></output>
+         <label for="M">(?)</label><select id="M">
+            <option value="0">算術平均</option>
+            <option value="1">幾何平均</option>
+            <option value="2">調和平均</option>
+         </select>
       </form>
    </body>
 </html>

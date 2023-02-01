@@ -47,6 +47,9 @@
          input:invalid {
             background-color: pink;
          }
+         .hidden {
+            display: none;
+         }
       </style>
       <script>
          const floor = v => (Math.floor(v * 100) / 100).toFixed(2);
@@ -117,13 +120,15 @@
          <label for="X">未定</label><input id="X" type="number" min="0" max="999.5" step="0.5">
          <label for="GPA">GPA</label><output id="GPA" for="APlus A B C D X M NoD"></output>
          <label for="N">単位数</label><output id="N" for="APlus A B C D X M NoD"></output>
-         <hr>
-         <select id="M">
-            <option value="0">算術平均</option>
-            <option value="1">幾何平均</option>
-            <option value="2">調和平均</option>
-         </select>
-         <div><input id="NoD" type="checkbox"><label for="NoD">落単帳消し</label></div>
+         <div class="hidden">
+            <hr>
+            <select id="M">
+               <option value="0">算術平均</option>
+               <option value="1">幾何平均</option>
+               <option value="2">調和平均</option>
+            </select>
+            <div><input id="NoD" type="checkbox"><label for="NoD">落単帳消し</label></div>
+         </div>
       </form>
    </body>
 </html>
